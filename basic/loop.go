@@ -16,5 +16,8 @@ func convertToBin(n int) string {
 
 func main() {
 	fmt.Println(convertToBin(13))
-
+	str := "aiolos"
+	for _, v := range str {
+		fmt.Printf("%c\n", v)
+	}
 }
