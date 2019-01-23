@@ -1,32 +1,53 @@
 package main
 
-import "fmt"
+import (
+	"aiolosgo/tree"
+	"fmt"
+)
+
+type myTreeNode struct {
+	node *tree.Node
+}
+
+func (myNode *myTreeNode) postOrder() {
+	if myNode == nil || myNode.node == nil {
+		return
+	}
+
+	left := myTreeNode{myNode.node.Left}
+	left.postOrder()
+	right := myTreeNode{myNode.node.Right}
+	right.postOrder()
+	myNode.node.Print()
+}
 
 func main() {
 
-	var root tree.TreeNode
-	root = tree.TreeNode{Value: 3}
-	root.Left = new(TreeNode)
-	root.Right = &TreeNode{}
+	var root tree.Node
+	root = tree.Node{Value: 3}
+	root.Left = new(tree.Node)
+	root.Right = &tree.Node{}
 	root.Left.SetValue(1)
 	root.Right.SetValue(180)
 
-	nodes := []TreeNode {
+	nodes := []tree.Node {
 		{5, nil, nil},
 		{},
 		{10, nil, &root},
 	}
 	fmt.Println(nodes)
 
-	cur := CreateTreeNode(99)
+	cur := tree.CreateNode(99)
 	fmt.Println(cur)
 	root.Left.SetValue(12)
 	root.Left.Print()
 	pRoot := &root
 	pRoot.SetValue(102)
 	root.Print()
-	var test *TreeNode
+	var test *tree.Node
 	test.SetValue(345)
 
 	root.Traverse()
+	myRoot := myTreeNode{&root}
+	myRoot.postOrder()
 }

@@ -2,16 +2,16 @@ package tree
 
 import "fmt"
 
-type TreeNode struct {
+type Node struct {
 	Value int
-	Left, Right *TreeNode
+	Left, Right *Node
 }
 
-func (node TreeNode) Print() {
+func (node Node) Print() {
 	fmt.Println(node.Value)
 }
 
-func (node *TreeNode) SetValue(value int) {
+func (node *Node) SetValue(value int) {
 	if node == nil {
 		fmt.Println("node is nil")
 		return
@@ -19,11 +19,11 @@ func (node *TreeNode) SetValue(value int) {
 	node.Value = value
 }
 
-func createTreeNode(value int) *TreeNode {
-	return &TreeNode{Value: value} // 局部变量分配在栈上，函数退出后立刻销毁
+func CreateNode(value int) *Node {
+	return &Node{Value: value} // 局部变量分配在栈上，函数退出后立刻销毁
 }
 
-func (node *TreeNode) Traverse() {
+func (node *Node) Traverse() {
 	if node == nil {
 		return
 	}
