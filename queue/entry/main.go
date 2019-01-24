@@ -15,4 +15,6 @@ func main() {
 	fmt.Println(q.IsEmpty())
 	q.Pop()
 	fmt.Println(q.IsEmpty())
+	q.Push("aiolos")
+	fmt.Println(q)
 }
