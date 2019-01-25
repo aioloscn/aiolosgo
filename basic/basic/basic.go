@@ -11,9 +11,14 @@ func euler() {
 }
 
 func triangle() {
-	const a, b = 3, 4
-	c := int(math.Sqrt(a * a + b * b))
-	fmt.Println(c)
+	var a, b = 3, 4
+	fmt.Println(calcTriangle(a, b))
+}
+
+func calcTriangle(a, b int) int {
+	var c int
+	c = int(math.Sqrt(float64(a * a + b * b)))
+	return c
 }
 
 func enums() {
