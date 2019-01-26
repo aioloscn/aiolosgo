@@ -40,3 +40,15 @@ func (node *Node) TraversalFunc(f func(*Node)) {
 	node.Right.TraversalFunc(f)
 }
 
+func (node *Node) TraverseWithChannel() chan *Node {
+	out := make(chan *Node)
+	go func() {
+		node.TraversalFunc(func (node *Node) {
+			fmt.Println("node:", node)
+			out <- node
+		})
+		close(out)
+	}()
+	return out
+}
+

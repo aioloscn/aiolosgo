@@ -2,6 +2,7 @@ package main
 
 import (
 	"aiolosgo/tree"
+	"fmt"
 )
 
 type myTreeNode struct {
@@ -24,11 +25,11 @@ func main() {
 
 	var root tree.Node
 	root.Traversal()
-	//root = tree.Node{Value: 3}
-	//root.Left = new(tree.Node)
-	//root.Right = &tree.Node{}
-	//root.Left.SetValue(1)
-	//root.Right.SetValue(180)
+	root = tree.Node{Value: 3}
+	root.Left = new(tree.Node)
+	root.Right = &tree.Node{}
+	root.Left.SetValue(1)
+	root.Right.SetValue(180)
 	//
 	//nodes := []tree.Node {
 	//	{5, nil, nil},
@@ -50,4 +51,14 @@ func main() {
 	//root.Traverse()
 	//myRoot := myTreeNode{&root}
 	//myRoot.postOrder()
+
+	c := root.TraverseWithChannel()
+	maxNode := 0
+	for node := range c {
+		fmt.Println("receive data")
+		if node.Value > maxNode {
+			maxNode = node.Value
+		}
+	}
+	fmt.Println("Max node value:", maxNode)
 }
