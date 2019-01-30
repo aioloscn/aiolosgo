@@ -2,6 +2,7 @@ package main
 
 import (
 	"aiolosgo/pipeline"
+	"bufio"
 	"fmt"
 	"os"
 )
@@ -12,22 +13,26 @@ func main() {
 	//	fmt.Println(v)
 	//}
 
-	file, err := os.Create("small.in")
+	const filename = "small.in"
+	const count = 64
+
+	file, err := os.Create(filename)
 	if err != nil {
 		panic(err)
 	}
 	defer file.Close()
 
-	p := pipeline.RandomSource(50)
-	pipeline.WriterSink(file, p)
+	p := pipeline.RandomSource(count)
+	writer := bufio.NewWriter(file)
+	pipeline.WriterSink(writer, p)
+	writer.Flush()
 
-	file, err = os.Open("small.in")
+	file, err = os.Open(filename)
 	if err != nil {
 		panic(err)
 	}
 
-	source := pipeline.ReaderSource(file)
-	p = pipeline.Merge(pipeline.InMemSort(source), pipeline.InMemSort(source))
+	p = pipeline.ReaderSource(bufio.NewReader(file), -1)
 	for v := range p {
 		fmt.Println(v)
 	}
