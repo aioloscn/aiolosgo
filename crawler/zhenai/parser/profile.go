@@ -3,10 +3,12 @@ package parser
 import (
 	"aiolosgo/crawler/engine"
 	"aiolosgo/crawler/model"
-	"fmt"
+	"bytes"
 	"regexp"
-	"strconv"
 )
+
+var re = regexp.MustCompile(`<div class="m-btn purple" data-v-bff6f798>([^>]+)</div>`)
+var re1 = regexp.MustCompile(`<div class="m-btn pink" data-v-bff6f798>([^>]+)</div>`)
 
 var ageRe = regexp.MustCompile(`<td><span class="label">年龄：</span>(\d+)岁</td>`)
 var heightRe = regexp.MustCompile(`<td><span class="label">身高：</span>(\d+)CM</td>`)
@@ -24,33 +26,47 @@ var guessRe = regexp.MustCompile(`<a class="exp-user-name"[^>]*href="(http://alb
 var idUrlRe = regexp.MustCompile(`http://album.zhenai.com/u/([\d]+)`)
 
 func ParseProfile(contents []byte, name string) engine.ParseResult {
-	fmt.Printf("%s", contents)
 	profile := model.Profile{}
 	profile.Name = name
-	age, err := strconv.Atoi(extractString(contents, ageRe))
-	if err == nil {
-		profile.Age = age
+	//age, err := strconv.Atoi(extractString(contents, ageRe))
+	//if err == nil {
+	//	profile.Age = age
+	//}
+	//
+	//height, err := strconv.Atoi(extractString(contents, heightRe))
+	//if err == nil {
+	//	profile.Height = height
+	//}
+	//
+	//weight, err := strconv.Atoi(extractString(contents, weightRe))
+	//if err == nil {
+	//	profile.Weight = weight
+	//}
+	//
+	//profile.Income = extractString(contents, incomeRe)
+	//profile.Gender = extractString(contents, genderRe)
+	//profile.Car = extractString(contents, carRe)
+	//profile.Education = extractString(contents, educationRe)
+	//profile.Hokou = extractString(contents, hokouRe)
+	//profile.House = extractString(contents, houseRe)
+	//profile.Marriage = extractString(contents, marriageRe)
+	//profile.Occupation = extractString(contents, occupationRe)
+	//profile.Xinzuo = extractString(contents, xinzuoRe)
+
+	var buffer bytes.Buffer
+	submatch := re.FindAllSubmatch(contents, -1)
+	for _, v := range submatch {
+		buffer.WriteString(string(v[1]))
+		buffer.WriteString(" ")
 	}
 
-	height, err := strconv.Atoi(extractString(contents, heightRe))
-	if err == nil {
-		profile.Height = height
+	submatch = re1.FindAllSubmatch(contents, -1)
+	for _, v := range submatch {
+		buffer.WriteString(string(v[1]))
+		buffer.WriteString(" ")
 	}
 
-	weight, err := strconv.Atoi(extractString(contents, weightRe))
-	if err == nil {
-		profile.Weight = weight
-	}
-
-	profile.Income = extractString(contents, incomeRe)
-	profile.Gender = extractString(contents, genderRe)
-	profile.Car = extractString(contents, carRe)
-	profile.Education = extractString(contents, educationRe)
-	profile.Hokou = extractString(contents, hokouRe)
-	profile.House = extractString(contents, houseRe)
-	profile.Marriage = extractString(contents, marriageRe)
-	profile.Occupation = extractString(contents, occupationRe)
-	profile.Xinzuo = extractString(contents, xinzuoRe)
+	profile.Details = buffer.String()
 
 	result := engine.ParseResult{
 		Items: []interface{}{profile},
